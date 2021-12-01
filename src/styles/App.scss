@@ -1,1 +1,8 @@
+@import "./index.scss";
 
+#root {
+  @include gradient(to bottom, $list1);
+  width: 100%;
+  height: 100vh;
+  @include flex-center;
+}

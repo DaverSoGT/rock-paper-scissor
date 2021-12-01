@@ -1,0 +1,18 @@
+.rules {
+  position: fixed;
+  background-color: white;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #3b4363;
+  z-index: 1;
+  gap: 60px;
+  img {
+    width: 80%;
+  }
+}
