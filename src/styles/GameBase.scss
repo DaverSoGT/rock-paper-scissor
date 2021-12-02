@@ -1,0 +1,13 @@
+@import "../styles/index.scss";
+
+.buttons__container {
+  height: 65vh;
+  width: 80%;
+  @include flex-center;
+  position: relative;
+}
+
+.buttons__base {
+  width: 80%;
+  height: 50%;
+}

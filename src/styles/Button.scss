@@ -5,6 +5,7 @@ button {
   height: 45px;
   background-color: transparent;
   @include flex-center;
+  font-family: $font;
   &:hover {
     cursor: pointer;
   }
@@ -19,10 +20,10 @@ button {
   border: 1px solid rgba($color: #fff, $alpha: 0.9);
   color: rgba($color: #fff, $alpha: 0.9);
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   letter-spacing: 0.1em;
-  width: 38%;
-  height: 40px;
+  width: 30%;
+  height: 36px;
 }
 
 .light {
