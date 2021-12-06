@@ -14,7 +14,7 @@ import { GameButton } from './GameButton'
 
 function Game() {
   const [showRules, setShowRules] = React.useState(false)
-  const [points, setPoints] = React.useState(12)
+  const [points, setPoints] = React.useState(0)
   const [hideButtons, setHideButtons] = React.useState(true)
   const [hideBase, setHideBase] = React.useState(false)
   const [hideResult, setHideResult] = React.useState(false)
@@ -23,17 +23,21 @@ function Game() {
   const [selectedButtonStyle, setSelectedButtonStyle] = React.useState('')
   const [showButton, setShowButton] = React.useState('empty-circle')
   const [styleCPUButton, setStyleCPUButton] = React.useState()
+  const [state, setState] = React.useState()
+  const [showResult, setShowResult] = React.useState(false)
 
   const options = [
     paper,
     scissors,
     rock
   ]
+  
+  const random = () => Math.floor(Math.random()*(max - min)) + min
 
   const max = 3
   const min = 0
-
-  const random = () => Math.floor(Math.random()*(max - min)) + min
+  const numberCPU = random()
+  let numberUser
 
   const openRules = () => {
     setShowRules(true)
@@ -47,6 +51,7 @@ function Game() {
     setSelectedButtonStyle('paper')
     setSelectedButtonType(paper)
     choiceCPU()
+    numberUser = 0
   }
 
   const rockClick = () => {
@@ -57,6 +62,7 @@ function Game() {
     setSelectedButtonStyle('rock-clicked')
     setSelectedButtonType(rock)
     choiceCPU()
+    numberUser = 2
   }
 
   const scissorsClick = () => {
@@ -67,27 +73,70 @@ function Game() {
     setSelectedButtonStyle('scissors-clicked')
     setSelectedButtonType(scissors)
     choiceCPU()
+    numberUser = 1
   }
 
   const choiceCPU = () => {
     setTimeout(() => {
       setHideBase(false)
-      const number = random()
-      if (number === 0) {
-        setShowButton(options[number])
+      if (numberCPU === 0) {
+        setShowButton(options[numberCPU])
         setStyleCPUButton('paper-cpu')
       }
-      else if (number === 1) {
-        setShowButton(options[number])
+      else if (numberCPU === 1) {
+        setShowButton(options[numberCPU])
         setStyleCPUButton('scissors-cpu') 
       }
-      else if (number === 2) {
-        setShowButton(options[number])
+      else if (numberCPU === 2) {
+        setShowButton(options[numberCPU])
         setStyleCPUButton('rock-cpu')
       }
+      setTimeout(() => {
+        if (numberCPU === numberUser) {
+          setState('Draw')
+          setShowResult(true)
+        } else if (numberCPU === 0 && numberUser === 1) {
+          setState('You Win')
+          setShowResult(true)
+          setPoints(points + 1)
+        } else if (numberCPU === 0 && numberUser === 2) {
+          setState('You Lose')
+          setShowResult(true)
+          setPoints(points - 1)
+        } else if (numberCPU === 1 && numberUser === 0) {
+          setState('You Lose')
+          setShowResult(true)
+          setPoints(points - 1)
+        } else if (numberCPU === 1 && numberUser === 2) {
+          setState('You Win')
+          setShowResult(true)
+          setPoints(points + 1)
+        } else if (numberCPU === 2 && numberUser === 0) {
+          setState('You Win')
+          setShowResult(true)
+          setPoints(points + 1)
+        } else if (numberCPU === 2 && numberUser === 1) {
+          setState('You Lose')
+          setShowResult(true)
+          setPoints(points - 1)
+        }
+      }, 1000)
     }, 1500)
   }
 
+  const comeBack = () => {
+    setHideButtons(true)
+    setHideBase(false)
+    setHideResult(false)
+    setResults(false)
+    setSelectedButtonType()
+    setSelectedButtonStyle('')
+    setShowButton('empty-circle')
+    setStyleCPUButton()
+    setState()
+    setShowResult(false)
+  }
+  
   return ReactDOM.createPortal(
     <section className='modal'>
       <Header points={points}/>
@@ -104,6 +153,12 @@ function Game() {
         <p className='description left'>You Picked</p>
         <GameButton hide={hideBase} typeButton={showButton} styleButton={!styleCPUButton ? showButton : styleCPUButton}/>
         <p className='description right'>The CPU Picked</p>
+        {!!showResult &&(
+          <React.Fragment>
+            <p className='result'>{state}</p>
+            <Button status={comeBack} styleValue='light go-back' value='PLAY AGAIN'/>
+          </React.Fragment>
+        )}
       </GameBase>
       )}
       <Button value='RULES' styleValue='transparent' status={openRules}/>

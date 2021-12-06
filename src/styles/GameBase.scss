@@ -1,7 +1,7 @@
 @import "../styles/index.scss";
 
 .buttons__container {
-  padding: 50px 10px;
+  padding: 30px 10px;
   height: 65vh;
   width: 90%;
   position: relative;
@@ -35,4 +35,13 @@
 .right {
   grid-column: 3 / 5;
   grid-row: 2 / 2;
+}
+
+.result {
+  grid-column: 1 / 5;
+  grid-row: 2 / 3;
+  text-transform: uppercase;
+  font-weight: 800;
+  font-size: 3rem;
+  letter-spacing: 0.03em;
 }
