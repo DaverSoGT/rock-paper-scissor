@@ -150,7 +150,6 @@ function Game() {
     }, 1500)
   }
 
-  
   const comeBack = () => {
     setHideButtons(true)
     setHideBase(false)
