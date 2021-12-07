@@ -12,9 +12,35 @@ import { Header } from './Header'
 import { GameBase } from './GameBase'
 import { GameButton } from './GameButton'
 
+function useLocalStorage(itemName, initialValue) {
+  const localStorageItem = localStorage.getItem(itemName)
+  let parsedItem
+
+  if (!localStorageItem) {
+    localStorage.setItem(itemName, JSON.stringify(initialValue))
+    parsedItem = initialValue
+  } else {
+    parsedItem = JSON.parse(localStorageItem)
+  }
+
+  const [item, setItem] = React.useState(parsedItem)
+
+  const saveItem = (newItem) => {
+    const stringifiedItem = JSON.stringify(newItem)
+    localStorage.setItem(itemName, stringifiedItem)
+    setItem(newItem)
+  }
+
+  return [
+    item,
+    saveItem
+  ]
+}
+
 function Game() {
   const [showRules, setShowRules] = React.useState(false)
-  const [points, setPoints] = React.useState(0)
+  const [score, saveScore] = useLocalStorage('SCORE_V1', '')
+  const [points, setPoints] = React.useState(score === 0 ? 0 : score)
   const [hideButtons, setHideButtons] = React.useState(true)
   const [hideBase, setHideBase] = React.useState(false)
   const [hideResult, setHideResult] = React.useState(false)
@@ -102,11 +128,11 @@ function Game() {
         } else if (numberCPU === 0 && numberUser === 2) {
           setState('You Lose')
           setShowResult(true)
-          setPoints(points - 1)
+          setPoints(points === 0 ? 0 : points - 1)
         } else if (numberCPU === 1 && numberUser === 0) {
           setState('You Lose')
           setShowResult(true)
-          setPoints(points - 1)
+          setPoints(points === 0 ? 0 : points - 1)
         } else if (numberCPU === 1 && numberUser === 2) {
           setState('You Win')
           setShowResult(true)
@@ -118,12 +144,13 @@ function Game() {
         } else if (numberCPU === 2 && numberUser === 1) {
           setState('You Lose')
           setShowResult(true)
-          setPoints(points - 1)
+          setPoints(points === 0 ? 0 : points - 1)
         }
       }, 1000)
     }, 1500)
   }
 
+  
   const comeBack = () => {
     setHideButtons(true)
     setHideBase(false)
@@ -136,6 +163,10 @@ function Game() {
     setState()
     setShowResult(false)
   }
+
+  React.useEffect(() => {
+    saveScore(points)
+  })
   
   return ReactDOM.createPortal(
     <section className='modal'>
